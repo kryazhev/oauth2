@@ -81,7 +81,7 @@ func NewConfig(endpointName string) (*Config, error) {
 	return &Config{
 		DataURL: os.Getenv("oauth2." + endpointName + ".data-url"),
 		Config: oauth2.Config{
-			RedirectURL:  os.Getenv("oauth2-redirect-uri"),
+			RedirectURL:  os.Getenv("oauth2.redirect-uri"),
 			ClientID:     os.Getenv("oauth2." + endpointName + ".client-id"),
 			ClientSecret: os.Getenv("oauth2." + endpointName + ".secret"),
 			Endpoint:     endpoint,
