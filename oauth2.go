@@ -1,4 +1,4 @@
-package auth2
+package oauth2
 
 import (
 	"context"
@@ -35,12 +35,12 @@ func init() {
 	// TODO add timeout settings as env
 	httpClient = &http.Client{Timeout: 5 * time.Second}
 
-	endpointNames := lookupEnv("oauth2-endpoint-names", "")
+	endpointNames := lookupEnv("oauth2.endpoint-names", "")
 
 	if len(endpointNames) > 0 {
 		split := strings.Split(endpointNames, ",")
 		for _, endpointName := range split {
-			config, err := OAuthConfig(endpointName)
+			config, err := NewConfig(endpointName)
 
 			if err != nil {
 				panic(err)
@@ -58,7 +58,7 @@ func lookupEnv(key, fallback string) string {
 	return fallback
 }
 
-func OAuthConfig(endpointName string) (*Config, error) {
+func NewConfig(endpointName string) (*Config, error) {
 	var endpoint oauth2.Endpoint
 
 	switch endpointName {
@@ -88,7 +88,7 @@ func OAuthConfig(endpointName string) (*Config, error) {
 			Scopes:       strings.Split(scopes, ",")}}, nil
 }
 
-func (cfg *Config) UserInfo(endpointName string, code string) (*User, error) {
+func (cfg *Config) GetUser(endpointName string, code string) (*User, error) {
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, httpClient)
 	token, err := cfg.Exchange(ctx, code)
 
